@@ -3,47 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown to November 29, 2025</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Countdown Timer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            color: #ffffff; /* text-white */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .mono-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800 bg-opacity-50 */
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+            max-width: 56rem; /* max-w-4xl */
+            margin: 1rem; /* mx-4 */
+        }
+        
+        .title {
+            font-size: 1.875rem; /* text-3xl */
+            line-height: 2.25rem;
+            font-weight: 700; /* font-bold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            color: #FBBF24; /* text-yellow-400 */
+        }
+
+        .subtitle {
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75rem;
+            margin-bottom: 2rem; /* mb-8 */
+            color: #D1D5DB; /* text-gray-300 */
+        }
+
+        /* Countdown Grid */
+        #countdown-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr)); /* grid-cols-2 */
+            gap: 1rem; /* gap-4 */
+        }
+
+        .tile {
+            background-color: #374151; /* bg-gray-700 */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+        }
+
+        .number {
+            font-size: 3rem; /* text-5xl */
+            line-height: 1;
+            font-weight: 900; /* font-black */
+        }
+
+        .label {
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            color: #9CA3AF; /* text-gray-400 */
+            margin-top: 0.5rem; /* mt-2 */
+        }
+
+        #expired-message {
+            font-size: 2.25rem; /* text-4xl */
+            line-height: 2.5rem;
+            font-weight: 700; /* font-bold */
+            color: #4ADE80; /* text-green-400 */
+            margin-top: 2rem; /* mt-8 */
+        }
+        
+        /* Share Button */
+        .share-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem; /* mt-8 */
+        }
+        
+        #share-button {
+            padding: 0.75rem; /* p-3 */
+            background-color: rgba(55, 65, 81, 0.5); /* bg-gray-700/50 */
+            border-radius: 9999px; /* rounded-full */
+            border: none;
+            cursor: pointer;
+            transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1); /* transition-colors duration-200 */
+        }
+
+        #share-button:hover {
+            background-color: #374151; /* hover:bg-gray-700 */
+        }
+        
+        #share-button:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #FBBF24; /* focus:ring-2 focus:ring-yellow-400 */
+        }
+        
+        .share-icon {
+            width: 1.5rem; /* w-6 */
+            height: 1.5rem; /* h-6 */
+            color: #FBBF24; /* text-yellow-400 */
+        }
+
+        /* Modal / Popup */
+        #qr-popup {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0; /* inset-0 */
+            background-color: rgba(0, 0, 0, 0.75); /* bg-black bg-opacity-75 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* p-4 */
+            z-index: 50;
+            opacity: 1;
+            transition: opacity 300ms;
+        }
+        
+        #qr-popup.hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .popup-content {
+            background-color: #1F2937; /* bg-gray-800 */
+            padding: 2rem; /* p-8 */
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
+            text-align: center;
+            position: relative;
+            max-width: 20rem; /* max-w-xs */
+            width: 100%;
+        }
+
+        #close-popup {
+            position: absolute;
+            top: 0.75rem; /* top-3 */
+            right: 0.75rem; /* right-3 */
+            color: #6B7281; /* text-gray-500 */
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 150ms;
+        }
+        
+        #close-popup:hover {
+            color: #ffffff; /* hover:text-white */
+        }
+
+        .popup-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            color: #FBBF24; /* text-yellow-400 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        .popup-text {
+            color: #9CA3AF; /* text-gray-400 */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+
+        .qr-wrapper {
+            display: inline-flex;
+            justify-content: center;
+            background-color: #ffffff; /* bg-white */
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+        }
+        
+        .qr-wrapper img {
+            border-radius: 0.125rem; /* rounded-sm */
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        /* Responsive Media Queries */
+        @media (min-width: 768px) {
+            .title {
+                font-size: 3rem; /* md:text-5xl */
+                line-height: 1;
+            }
+            .subtitle {
+                font-size: 1.25rem; /* md:text-xl */
+                line-height: 1.75rem;
+            }
+            #countdown-container {
+                grid-template-columns: repeat(4, minmax(0, 1fr)); /* md:grid-cols-4 */
+                gap: 2rem; /* md:gap-8 */
+            }
+            .number {
+                font-size: 4.5rem; /* md:text-7xl */
+            }
+            .label {
+                font-size: 1.125rem; /* md:text-lg */
+                line-height: 1.75rem;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
-    <div class="text-center p-8 bg-gray-800 bg-opacity-50 rounded-2xl shadow-2xl max-w-4xl mx-4">
-        <h1 class="text-3xl md:text-5xl font-bold mb-2 text-yellow-400">Something Big is Coming</h1>
-        <p class="text-lg md:text-xl mb-8 text-gray-300">Countdown to November 29, 2025</p>
-        <div id="countdown-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <div id="days" class="text-5xl md:text-7xl font-black text-white">00</div>
-                <div class="text-sm md:text-lg text-gray-400 mt-2">Days</div>
+<body>
+    <div class="container">
+        <h1 class="title">Something Big is Coming</h1>
+        <p id="subtitle" class="subtitle"></p>
+        <div id="countdown-container">
+            <div class="tile">
+                <div id="days" class="number mono-font">00</div>
+                <div class="label">Days</div>
             </div>
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <div id="hours" class="text-5xl md:text-7xl font-black text-white">00</div>
-                <div class="text-sm md:text-lg text-gray-400 mt-2">Hours</div>
+            <div class="tile">
+                <div id="hours" class="number mono-font">00</div>
+                <div class="label">Hours</div>
             </div>
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <div id="minutes" class="text-5xl md:text-7xl font-black text-white">00</div>
-                <div class="text-sm md:text-lg text-gray-400 mt-2">Minutes</div>
+            <div class="tile">
+                <div id="minutes" class="number mono-font">00</div>
+                <div class="label">Minutes</div>
             </div>
-            <div class="bg-gray-700 p-6 rounded-lg shadow-lg">
-                <div id="seconds" class="text-5xl md:text-7xl font-black text-white">00</div>
-                <div class="text-sm md:text-lg text-gray-400 mt-2">Seconds</div>
+            <div class="tile">
+                <div id="seconds" class="number mono-font">00</div>
+                <div class="label">Seconds</div>
             </div>
         </div>
-        <div id="expired-message" class="hidden text-4xl font-bold text-green-400 mt-8">
+        <div id="expired-message" class="hidden">
             The time has arrived!
+        </div>
+
+        <div class="share-container">
+            <button id="share-button" title="Share Countdown">
+                <svg class="share-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6.002l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.367a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
+            </button>
         </div>
     </div>
 
+    <div id="qr-popup" class="hidden">
+        <div class="popup-content">
+            <button id="close-popup">
+                <svg class="share-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="popup-title">Share Countdown</h2>
+            <p class="popup-text">Scan with your phone's camera.</p>
+            <div class="qr-wrapper">
+                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://ssta604.github.io/countdown-timer/&color=111827&bgcolor=FFFFFF&margin=1" alt="QR Code linking to the countdown page">
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        // Set the date we're counting down to
-        const countDownDate = new Date("Nov 29, 2025 00:00:00").getTime();
+        // Get date from URL query parameter 'date'
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+
+        // Default date if parameter is not provided or invalid
+        let targetDate = "Nov 29, 2025";
+        
+        // Use the date from the query parameter if it's a valid date string
+        if (dateParam && !isNaN(new Date(dateParam))) {
+             // Basic validation to ensure it's a parseable date string
+            targetDate = dateParam;
+        }
+
+        const targetDateObj = new Date(targetDate);
+        const countDownDate = new Date(targetDate + " 00:00:00").getTime();
+
+        // Update the subtitle and title with the target date
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = targetDateObj.toLocaleDateString(undefined, options);
+        document.getElementById('subtitle').textContent = `Countdown to ${formattedDate}`;
+        document.title = `Countdown to ${formattedDate}`;
+
 
         // Update the count down every 1 second
         const x = setInterval(function() {
@@ -76,6 +317,26 @@
                 document.getElementById("expired-message").classList.remove("hidden");
             }
         }, 1000);
+
+        // Popup logic
+        const shareButton = document.getElementById('share-button');
+        const closeButton = document.getElementById('close-popup');
+        const qrPopup = document.getElementById('qr-popup');
+
+        shareButton.addEventListener('click', () => {
+            qrPopup.classList.remove('hidden');
+        });
+
+        closeButton.addEventListener('click', () => {
+            qrPopup.classList.add('hidden');
+        });
+
+        // Close popup when clicking outside the modal content
+        qrPopup.addEventListener('click', (event) => {
+            if (event.target === qrPopup) {
+                qrPopup.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
