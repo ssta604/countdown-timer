@@ -1,6 +1,7 @@
 const CACHE_NAME = 'countdown-timer-cache-v1';
 const urlsToCache = [
   '/countdown-timer/index.html',
+  '/countdown-timer/favicon.svg',
   '/countdown-timer/icon-192.svg',
   '/countdown-timer/icon-512.svg',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap',
