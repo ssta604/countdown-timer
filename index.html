@@ -359,6 +359,13 @@
             const subtitleText = `${countdownText} ${formattedDate} (${dayOfWeek})`;
             document.getElementById('subtitle').textContent = subtitleText;
 
+            const title = document.querySelector('.title');
+            if (countDownDate - now < 0) {
+                title.textContent = "Something Big Happened";
+            } else {
+                title.textContent = "Something Big is Coming";
+            }
+
         }, 1000);
 
         // Popup logic
