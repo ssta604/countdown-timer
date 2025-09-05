@@ -323,7 +323,10 @@
             document.getElementById("hours").innerHTML = formatTime(hours);
             document.getElementById("minutes").innerHTML = formatTime(minutes);
             document.getElementById("seconds").innerHTML = formatTime(seconds);
-            document.getElementById('subtitle').textContent = `${countdownText} ${formattedDate}`;
+            
+            const dayOfWeek = targetDateObj.toLocaleDateString(undefined, { weekday: 'long' });
+            const subtitleText = countDownDate - now < 0 ? `${countdownText} ${formattedDate} (${dayOfWeek})` : `${countdownText} ${formattedDate}`;
+            document.getElementById('subtitle').textContent = subtitleText;
 
         }, 1000);
 
