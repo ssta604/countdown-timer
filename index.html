@@ -81,14 +81,6 @@
             margin-top: 0.5rem; /* mt-2 */
         }
 
-        #expired-message {
-            font-size: 2.25rem; /* text-4xl */
-            line-height: 2.5rem;
-            font-weight: 700; /* font-bold */
-            color: #4ADE80; /* text-green-400 */
-            margin-top: 2rem; /* mt-8 */
-        }
-        
         /* Share Button */
         .share-container {
             display: flex;
@@ -253,9 +245,6 @@
                 <div class="label">Seconds</div>
             </div>
         </div>
-        <div id="expired-message" class="hidden">
-            The time has arrived!
-        </div>
 
         <div class="share-container">
             <button id="share-button" title="Share Countdown">
@@ -312,30 +301,30 @@
             // Get today's date and time
             const now = new Date().getTime();
 
-            // Find the distance between now and the count down date
-            const distance = countDownDate - now;
-
             // Time calculations for days, hours, minutes and seconds
+            let distance = countDownDate - now;
+            let countdownText = "Countdown to";
+
+            if (distance < 0) {
+                distance = now - countDownDate;
+                countdownText = "Time since";
+            }
+
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             // Function to format number with leading zero
-            const formatTime = (time) => time < 10 ? `0${time}` : time;
+            const formatTime = (time) => time;
 
             // Display the result in the corresponding elements
             document.getElementById("days").innerHTML = formatTime(days);
             document.getElementById("hours").innerHTML = formatTime(hours);
             document.getElementById("minutes").innerHTML = formatTime(minutes);
             document.getElementById("seconds").innerHTML = formatTime(seconds);
+            document.getElementById('subtitle').textContent = `${countdownText} ${formattedDate}`;
 
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("countdown-container").classList.add("hidden");
-                document.getElementById("expired-message").classList.remove("hidden");
-            }
         }, 1000);
 
         // Popup logic
