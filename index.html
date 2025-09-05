@@ -306,7 +306,7 @@
             let countdownText = "Countdown to";
 
             if (distance < 0) {
-                distance = now - countDownDate;
+                distance = Math.abs(distance);
                 countdownText = "Time since";
             }
 
@@ -316,7 +316,7 @@
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             // Function to format number with leading zero
-            const formatTime = (time) => time;
+            const formatTime = (time) => countDownDate - now < 0 ? `-${time}`: time;
 
             // Display the result in the corresponding elements
             document.getElementById("days").innerHTML = formatTime(days);
