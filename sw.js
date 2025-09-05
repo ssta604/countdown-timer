@@ -1,4 +1,4 @@
-const CACHE_NAME = 'countdown-timer-cache-v1';
+const CACHE_NAME = 'countdown-timer-cache-v2';
 const urlsToCache = [
   '/countdown-timer/index.html',
   '/countdown-timer/favicon.ico',
@@ -18,6 +18,23 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
