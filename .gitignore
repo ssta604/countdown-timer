@@ -44,6 +44,3 @@ out/
 # Ignore misc
 *.orig
 *.rej
-# Ignore countdown-timer specific
-sw.js
-manifest.json

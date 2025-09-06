@@ -1,4 +1,4 @@
-const CACHE_NAME = 'countdown-timer-cache-v8';
+const CACHE_NAME = 'countdown-timer-cache-v9';
 const urlsToCache = [
   '/countdown-timer/index.html',
   '/countdown-timer/favicon.ico',
@@ -10,6 +10,7 @@ const urlsToCache = [
   'https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2',
   'https://fonts.gstatic.com/s/robotomono/v22/L0x5DF4xlVMF-BfR8bXMIjhGq3-cXbKDO1w.woff2'
 ];
+
 
 self.addEventListener('install', event => {
   event.waitUntil(
