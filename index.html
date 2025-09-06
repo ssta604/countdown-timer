@@ -89,9 +89,10 @@
             display: flex;
             justify-content: center;
             margin-top: 2rem; /* mt-8 */
+            gap: .5ch;
         }
         
-        #share-button {
+        .action-button {
             padding: 0.75rem; /* p-3 */
             background-color: rgba(55, 65, 81, 0.5); /* bg-gray-700/50 */
             border-radius: 9999px; /* rounded-full */
@@ -100,17 +101,17 @@
             transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1); /* transition-colors duration-200 */
         }
 
-        #share-button:hover {
+        .action-button:hover {
             background-color: #374151; /* hover:bg-gray-700 */
         }
         
-        #share-button:focus {
+        .action-button:focus {
             outline: 2px solid transparent;
             outline-offset: 2px;
             box-shadow: 0 0 0 2px #FBBF24; /* focus:ring-2 focus:ring-yellow-400 */
         }
         
-        .share-icon {
+        .action-icon {
             width: 1.5rem; /* w-6 */
             height: 1.5rem; /* h-6 */
             color: #FBBF24; /* text-yellow-400 */
@@ -245,6 +246,84 @@
             }
         }
     </style>
+    <style>
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.75); /* Darker overlay */
+        /* Flexbox for centering */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content {
+        background-color: #1F2937; /* Dark background */
+        padding: 2rem; /* Increased padding for consistency with other popups */
+        border: 1px solid #374151; /* Darker border */
+        width: 80%;
+        max-width: 25rem; /* Added max-width for better control on larger screens */
+        border-radius: 1rem; /* Rounded corners */
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Shadow from other popups */
+        color: #ffffff; /* White text */
+        position: relative;
+        /* Removed margin: 15% auto; */
+      }
+      .close-button {
+        color: #6B7281; /* Gray color from other close buttons */
+        float: right; /* Keep float right for positioning */
+        font-size: 28px;
+        font-weight: bold;
+        background: none; /* Ensure no background */
+        border: none; /* Ensure no border */
+        cursor: pointer;
+        transition: color 150ms; /* Transition for hover effect */
+        position: absolute; /* Absolute positioning for close button */
+        top: 0.75rem;
+        right: 0.75rem;
+      }
+      .close-button:hover,
+      .close-button:focus {
+        color: #ffffff; /* White on hover */
+        text-decoration: none;
+      }
+      .modal-content label, .modal-content input, .modal-content button {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .modal-content input[type="text"], .modal-content input[type="datetime-local"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        border: 1px solid #374151; /* Darker border for inputs */
+        border-radius: 4px;
+        background-color: #111827; /* Darker input background */
+        color: #ffffff; /* White text in inputs */
+      }
+      .modal-content button {
+        background-color: #FBBF24; /* Yellow button */
+        color: #111827; /* Dark text on yellow button */
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 1rem; /* Add some top margin */
+      }
+      .modal-content button:hover {
+        background-color: #E5A800; /* Darker yellow on hover */
+      }
+      .modal-content h2 {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 700; /* font-bold */
+        color: #FBBF24; /* text-yellow-400 */
+        margin-bottom: 1rem; /* mb-4 */
+      }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -270,8 +349,12 @@
         </div>
 
         <div class="share-container">
-            <button id="share-button" title="Share Countdown">
-                <svg class="share-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6.002l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.367a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
+            <button id="settings-button" class="action-button" title="Settings">
+                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="sr-only">Settings</span>
+            </button>
+            <button id="share-button" class="action-button" title="Share Countdown">
+                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6.002l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.367a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
                 <span class="sr-only">Share countdown</span>
             </button>
         </div>
@@ -301,72 +384,7 @@
 
 
     <script>
-        // Get date from URL query parameter 'date'
-        const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-
-        // Default date if parameter is not provided or invalid
-        let targetDate = "Nov 29, 2025";
         
-        // Use the date from the query parameter if it's a valid date string
-        if (dateParam && !isNaN(new Date(dateParam))) {
-             // Basic validation to ensure it's a parseable date string
-            targetDate = dateParam;
-        } else if (dateParam) {
-            console.error(`Invalid date parameter: ${dateParam}. Using default date.`);
-        }
-
-        const targetDateObj = new Date(targetDate);
-        const countDownDate = new Date(targetDate + " 00:00:00").getTime();
-
-        // Update the subtitle and title with the target date
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const formattedDate = targetDateObj.toLocaleDateString(undefined, options);
-        document.getElementById('subtitle').textContent = `Countdown to ${formattedDate}`;
-        document.title = `Countdown to ${formattedDate}`;
-
-
-        // Update the count down every 1 second
-        const x = setInterval(function() {
-
-            // Get today's date and time
-            const now = new Date().getTime();
-
-            // Time calculations for days, hours, minutes and seconds
-            let distance = countDownDate - now;
-            let countdownText = "Countdown to";
-
-            if (distance < 0) {
-                distance = Math.abs(distance);
-                countdownText = "Time since";
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Function to format number with leading zero
-            const formatTime = (time) => countDownDate - now < 0 ? `-${time}`: time;
-
-            // Display the result in the corresponding elements
-            document.getElementById("days").innerHTML = formatTime(days);
-            document.getElementById("hours").innerHTML = formatTime(hours);
-            document.getElementById("minutes").innerHTML = formatTime(minutes);
-            document.getElementById("seconds").innerHTML = formatTime(seconds);
-            
-            const dayOfWeek = targetDateObj.toLocaleDateString(undefined, { weekday: 'long' });
-            const subtitleText = `${countdownText} ${formattedDate} (${dayOfWeek})`;
-            document.getElementById('subtitle').textContent = subtitleText;
-
-            const title = document.querySelector('.title');
-            if (countDownDate - now < 0) {
-                title.textContent = "Something Big Happened";
-            } else {
-                title.textContent = "Something Big is Coming";
-            }
-
-        }, 1000);
 
         // Popup logic
         const shareButton = document.getElementById('share-button');
@@ -411,6 +429,18 @@
           });
         }
     </script>
+    <div id="settings-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Settings</h2>
+        <label for="event-name">Event Name:</label>
+        <input type="text" id="event-name" value="New Year">
+        <label for="countdown-date">Countdown Date:</label>
+        <input type="datetime-local" id="countdown-date">
+        <button id="save-settings">Save</button>
+      </div>
+    </div>
+    <script src="settings.js"></script>
 </body>
 </html>
 
