@@ -247,7 +247,19 @@
         }
     </style>
     <style>
-      .modal {
+       .modal {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0; /* inset-0 */
+            background-color: rgba(0,0,0,0.75); /* Darker overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* p-4 */
+            z-index: 50;
+            opacity: 1;
+            transition: opacity 300ms;
+       }
+      .modalZ {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
         z-index: 1; /* Sit on top */
@@ -266,13 +278,13 @@
         background-color: #1F2937; /* Dark background */
         padding: 2rem; /* Increased padding for consistency with other popups */
         border: 1px solid #374151; /* Darker border */
-        width: 80%;
+        width: 100%;
         max-width: 25rem; /* Added max-width for better control on larger screens */
         border-radius: 1rem; /* Rounded corners */
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Shadow from other popups */
         color: #ffffff; /* White text */
         position: relative;
-        /* Removed margin: 15% auto; */
+        margin: auto;
       }
       .close-button {
         color: #6B7281; /* Gray color from other close buttons */
