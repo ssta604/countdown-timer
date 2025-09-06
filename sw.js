@@ -1,4 +1,4 @@
-const CACHE_NAME = 'countdown-timer-cache-v7';
+const CACHE_NAME = 'countdown-timer-cache-v8';
 const urlsToCache = [
   '/countdown-timer/index.html',
   '/countdown-timer/favicon.ico',
