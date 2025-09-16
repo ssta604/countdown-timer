@@ -11,25 +11,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const containerElement = document.querySelector('.container');
     const tileElements = document.querySelectorAll('.tile');
 
+
+    // Handle custom color inputs
+    const colorInputs = document.querySelectorAll('input[type="color"]');
+    colorInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            document.documentElement.style.setProperty(`--${e.target.id}`, e.target.value);
+        });
+    });
+
+
+
     // Apply theme to body and main elements
     function applyTheme(theme) {
         const themes = [
             'theme-dark', 'theme-light',
             'theme-blue', 'theme-green', 'theme-red', 'theme-purple', 'theme-aqua', 'theme-orange',
-            'theme-pink', 'theme-teal', 'theme-brown', 'theme-lime', 'theme-indigo'
+            'theme-pink', 'theme-teal', 'theme-brown', 'theme-lime', 'theme-indigo', 'theme-custom',
         ];
+
         document.body.classList.remove(...themes);
-        containerElement.classList.remove(...themes);
-        tileElements.forEach(tile => tile.classList.remove(...themes));
+
+
         if (themes.includes('theme-' + theme)) {
             document.body.classList.add('theme-' + theme);
-            containerElement.classList.add('theme-' + theme);
-            tileElements.forEach(tile => tile.classList.add('theme-' + theme));
         } else {
             document.body.classList.add('theme-dark');
-            containerElement.classList.add('theme-dark');
-            tileElements.forEach(tile => tile.classList.add('theme-dark'));
         }
+
+        if (theme === 'custom') {
+        }
+
+
     }
 
     // Load settings from local storage
@@ -39,21 +52,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('theme') || 'dark';
 
         if (!savedEventName) {
-            localStorage.setItem("eventName","Something Big is Coming"); // Default value for input
+            localStorage.setItem("eventName", "Something Big is Coming"); // Default value for input
         }
 
         if (!savedCountdownDate) {
-            localStorage.setItem("countdownDate","2025-11-29T00:00"); // Default to Nov. 29, 2025
+            localStorage.setItem("countdownDate", "2025-11-29T00:00"); // Default to Nov. 29, 2025
         } else {
             try {
                 let testDate = new Date(savedCountdownDate).getDate()
             } catch (error) {
-                localStorage.setItem("countdownDate","2025-11-29T00:00"); // Default to Nov. 29, 2025
+                localStorage.setItem("countdownDate", "2025-11-29T00:00"); // Default to Nov. 29, 2025
             }
         }
 
         themeSelect.value = savedTheme;
         applyTheme(savedTheme);
+
+        // restore custom colors
+        colorInputs.forEach(input => {
+            const savedColor = localStorage.getItem(input.id);
+            if (savedColor) {
+                document.documentElement.style.setProperty(`--${input.id}`, savedColor);
+                //document.documentElement.style.setProperty(`--${input.id}`, savedColor);
+                input.value = savedColor;
+            }
+        });
+
+
         updateCountdownDisplay();
     }
 
@@ -62,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('eventName', eventNameInput.value);
         localStorage.setItem('countdownDate', countdownDateInput.value);
         localStorage.setItem('theme', themeSelect.value);
+
+        // Save custom colors
+        colorInputs.forEach(input => {
+            localStorage.setItem(input.id, input.value);
+        });
+        
         settingsModal.style.display = 'none'; // Hide modal after saving
         applyTheme(themeSelect.value);
         updateCountdownDisplay();
@@ -112,13 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
         subtitleElement.textContent = `${countdownText} ${formattedDate} (${dayOfWeek})`;
     }
 
-    // Event Listeners
     settingsButton.addEventListener('click', () => {
         settingsModal.style.display = 'block';
         // Load current values into the form when opening
         eventNameInput.value = localStorage.getItem('eventName') || titleElement.textContent;
         countdownDateInput.value = localStorage.getItem('countdownDate') || '';
         themeSelect.value = localStorage.getItem('theme') || 'dark';
+        customThemeSettings.style.display = themeSelect.value === 'custom' ? 'grid' : 'none';
     });
 
     closeButton.addEventListener('click', () => {
@@ -134,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     saveSettingsButton.addEventListener('click', saveSettings);
     themeSelect.addEventListener('change', (e) => {
+        customThemeSettings.style.display = themeSelect.value === 'custom' ? 'grid' : 'none';
         applyTheme(e.target.value);
     });
 
